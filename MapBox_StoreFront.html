@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <title>Storefront Contest</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1' />
+    <script src='https://api.tiles.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.js'></script>
+    <link href='https://api.tiles.mapbox.com/mapbox-gl-js/v2.14.1/mapbox-gl.css' rel='stylesheet' />
+    <style>
+
+      body { 
+        margin: 0; 
+        padding: 0; 
+      }
+
+      #map { 
+        position: absolute; 
+        top: 0; 
+        bottom: 0; 
+        width: 100%; 
+        
+      }
+      .svg-overlay {
+      position: absolute;
+      top: -10px; /* Adjust as needed */
+      left: 425px; /* Adjust as needed */
+      height: 125px; /* Adjust as needed */
+      width: auto;
+      z-index: 1;
+    }
+    .svg-overlay-second-svg {
+      position: absolute;
+      top: 5px; /* Adjust as needed */
+      right: 10px; /* Adjust as needed */
+      height: 75px; /* Adjust as needed */
+      width: auto;
+      z-index: 1;
+    }
+    .svg-overlay-third-svg {
+      position: absolute;
+      bottom: -20px; /* Adjust as needed */
+      left: 300px; /* Adjust as needed */
+      height: 250px; /* Adjust as needed */
+      width: auto;
+      z-index: 1;
+    }
+    </style>
+  </head>
+  <body>
+    <div id='map'></div>
+    <img src='/Users/robem2/Desktop/SVG/Asset 1.svg' class='svg-overlay' alt='SVG Overlay'>
+    <img src='/Users/robem2/Desktop/SVG/Asset 2.svg' class='svg-overlay-second-svg' alt='Second SVG Overlay'>
+    <img src='/Users/robem2/Desktop/SVG/Asset 3.svg' class='svg-overlay-third-svg' alt='Second SVG Overlay'>
+    <script>
+    // The value for 'accessToken' begins with 'pk...'
+    mapboxgl.accessToken = 'pk.eyJ1Ijoicm93ZWxsciIsImEiOiJjbGZxOWttcXYxY3poM3pwZjN4bXllbTBnIn0.aPCQrz8mnwYDePDhCm4qEA'; 
+    const map = new mapboxgl.Map({
+      container: 'map',
+      // Replace YOUR_STYLE_URL with your style URL.
+      style: 'mapbox://styles/rowellr/cloxlni8i009q01r69llx8bs2',
+      center: [-119.790, 36.735],
+      zoom: 14.5  
+    });
+/* 
+Add an event listener that runs
+  when a user clicks on the map element.
+*/
+map.on('click', (event) => {
+  // If the user clicked on one of your markers, get its information.
+  const features = map.queryRenderedFeatures(event.point, {
+    layers: ['storefront-contest'] // replace with your layer name
+  });
+  if (!features.length) {
+    return;
+  }
+  const feature = features[0];
+
+  // Code from the next step will go here.
+});
+
+map.on('click', (event) => {
+  console.log("Map clicked at", event.point);
+  const features = map.queryRenderedFeatures(event.point, {
+    layers: ['storefront-contest']
+  });
+
+  console.log("Features found:", features);
+
+  if (!features.length) {
+    console.log("No features found at this point");
+    return;
+  }
+
+  const feature = features[0];
+  // rest of your code...
+
+  /* 
+    Create a popup, specify its options 
+    and properties, and add it to the map.
+  */
+const popup = new mapboxgl.Popup({ offset: [0, -15] })
+  .setLngLat(feature.geometry.coordinates)
+  .setHTML(
+    `<h3>${feature.properties.Title}</h3><p>${feature.properties.Address}</p>`
+  )
+  .addTo(map);
+});
+
+
+    </script>
+  </body>
+</html>
